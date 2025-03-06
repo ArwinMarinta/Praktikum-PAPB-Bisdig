@@ -34,6 +34,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String tets = "Praktikum";
   int test2 = 2;
+  bool a = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       style: TextStyle(
                           fontSize: 20.0, fontWeight: FontWeight.w500),
                     ),
-                    Text("3")
+                    Text("3"),
                   ],
                 ),
               ),
@@ -90,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     Text("1"),
                     Text("2"),
-                    Text("3"),
+                    Text(a ? "10" : "30"),
                   ],
                 ),
               )
