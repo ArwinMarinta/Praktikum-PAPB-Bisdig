@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     // mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'How Are You Feeling Today?',
                         style: TextStyle(
                             fontSize: 14.0, fontWeight: FontWeight.w400),
