@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:praktikum_1/view/home.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
