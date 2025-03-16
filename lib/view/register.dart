@@ -1,58 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:praktikum_1/view/home.dart';
-import 'package:praktikum_1/view/register.dart';
-import 'package:praktikum_1/service/database/database.dart';
-import 'package:praktikum_1/service/user/helper/user_helper.dart';
-import 'package:praktikum_1/service/user/model/user.dart';
+import '../service/user/helper/user_helper.dart';
+import '../service/user/model/user.dart';
+import '../view/login.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterState extends State<Register> {
   final UserHelper userHelper = UserHelper();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool passwordVisible = false;
-
-  Future<void> loginUser() async {
-    String email = emailController.text;
-    String password = passwordController.text;
-
-    User? user = await userHelper.loginUser(email, password);
-
-    if (user != null) {
-      // Jika login berhasil, pindah ke halaman utama (HomePage)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Login Berhasil!"),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => MyHomePage()),
-        (Route<dynamic> route) => false,
-      );
-    } else {
-      // Jika login gagal, tampilkan pesan
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Email atau Password salah"),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
 
   @override
   void initState() {
     super.initState();
     passwordVisible = true;
+  }
+
+  Future<void> _register() async {
+    String name = nameController.text.trim();
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Semua bidang harus diisi!")),
+      );
+      return;
+    }
+
+    User newUser = User(name: name, email: email, password: password);
+    await userHelper.registerUser(newUser);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Registrasi berhasil! Silakan login.")),
+    );
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
   }
 
   @override
@@ -83,13 +77,46 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const Text(
-                      "Login",
+                      "Register",
                       style: TextStyle(
                         fontSize: 40.0,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF881FFF),
                       ),
                     )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      child: Text(
+                        "Name",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                        hintText: 'Masukkan Nama',
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 20.0,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -145,17 +172,17 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: null,
-                          child: const Text(
-                            "Lupa Kata Sandi",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF881FFF),
-                            ),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: null,
+                        //   child: const Text(
+                        //     "Lupa Kata Sandi",
+                        //     style: TextStyle(
+                        //       fontSize: 14.0,
+                        //       fontWeight: FontWeight.w500,
+                        //       color: Color(0xFF881FFF),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                     const SizedBox(height: 8.0),
@@ -187,12 +214,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(
-                height: 10.0,
+                height: 30.0,
               ),
               SizedBox(
                 width: double.infinity,
                 child: GestureDetector(
-                  onTap: loginUser,
+                  onTap: _register,
                   child: Container(
                     decoration: const BoxDecoration(
                       color: Color(0xFF881FFF),
@@ -201,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: const Center(
                       child: Text(
-                        "Masuk",
+                        "Register",
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -210,41 +237,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 30.0,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Belum Punya Akun?",
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const Text(" "),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Register()));
-                      },
-                      child: const Text(
-                        "Daftar Di Sini",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF881FFF),
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ],
