@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:praktikum_1/view/home.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:praktikum_1/application/login/bloc/login_bloc.dart';
+import 'package:praktikum_1/application/login/view/login.dart';
+import 'package:praktikum_1/application/register/bloc/register_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<LoginBloc>(
+          create: (context) => LoginBloc(),
+        ),
+        BlocProvider<RegisterBloc>(
+          create: (context) => RegisterBloc(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: const LoginPage(),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:praktikum_1/view/login.dart';
+import 'package:praktikum_1/application/login/view/login.dart';
 import 'package:praktikum_1/view/notification.dart';
 import 'package:praktikum_1/widget/navigation.dart';
 
